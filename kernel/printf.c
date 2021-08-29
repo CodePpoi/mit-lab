@@ -25,6 +25,8 @@ static struct {
 
 static char digits[] = "0123456789abcdef";
 
+
+
 static void
 printint(int xx, int base, int sign)
 {
@@ -57,6 +59,19 @@ printptr(uint64 x)
   consputc('x');
   for (i = 0; i < (sizeof(uint64) * 2); i++, x <<= 4)
     consputc(digits[x >> (sizeof(uint64) * 8 - 4)]);
+}
+
+void backtrace() {
+  uint64 fp = r_fp();
+  uint64 up = PGROUNDUP(fp);
+  printf("backtrace:\n");
+  while(fp < up) {
+  //uint64* val = (uint64 *) fp;
+  uint64* return_address = (uint64*) (fp - 8);
+  uint64* saved_pointer = (uint64*) (fp - 16);
+  printf("%p\n", *return_address);
+  fp = *saved_pointer;
+  }
 }
 
 // Print to the console. only understands %d, %x, %p, %s.
@@ -121,6 +136,7 @@ panic(char *s)
   printf("panic: ");
   printf(s);
   printf("\n");
+  backtrace();
   panicked = 1; // freeze uart output from other CPUs
   for(;;)
     ;

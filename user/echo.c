@@ -5,7 +5,9 @@
 int
 main(int argc, char *argv[])
 {
-  int i;
+printf("x=%d y=%d", 3); unsigned int k = 0x00646c72;
+printf("H%x Wo%s", 57616, &k);
+ int i;
 
   for(i = 1; i < argc; i++){
     write(1, argv[i], strlen(argv[i]));

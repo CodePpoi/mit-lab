@@ -21,8 +21,8 @@ void slow_handler();
 int
 main(int argc, char *argv[])
 {
-  test0();
-  test1();
+test0();
+test1();
   test2();
   exit(0);
 }
@@ -119,6 +119,8 @@ test2()
   if ((pid = fork()) < 0) {
     printf("test2: fork failed\n");
   }
+//    printf("pid: %d\n", pid);
+ //   printf("getpid: %d\n", getpid());
   if (pid == 0) {
     count = 0;
     sigalarm(2, slow_handler);

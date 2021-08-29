@@ -8,6 +8,7 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+struct trapframe;
 
 // bio.c
 void            binit(void);
@@ -77,6 +78,7 @@ int             piperead(struct pipe*, uint64, int);
 int             pipewrite(struct pipe*, uint64, int);
 
 // printf.c
+void            backtrace();
 void            printf(char*, ...);
 void            panic(char*) __attribute__((noreturn));
 void            printfinit(void);
