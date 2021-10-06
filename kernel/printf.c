@@ -17,6 +17,23 @@
 
 volatile int panicked = 0;
 
+
+
+void backtrace() {
+  uint64 fp = r_fp(); //fp是一个地址，页表地址，或者说一个指针
+  uint64 up = PGROUNDUP(fp); //为什么用UP而不同down，见下面saved_pointer
+  printf("backtrace:\n");
+  while(fp < up) {
+  //uint64* val = (uint64 *) fp; //获取fp所指定的地址上的值
+  uint64* return_address = (uint64*) (fp - 8); // 获取fp - 8多指定的地址上的值，其实就是return_address
+  uint64* saved_pointer = (uint64*) (fp - 16); 
+/*** saved_pointer指向调用本子方法的父方法，因为栈的分配是由高到低的，
+所以父方法的栈会在高处，也就是地址比较大，
+所以其实一直向上找的过程，但是不能越过这个页表的最高处(变量up)*/
+  printf("%p\n", *return_address);
+  fp = *saved_pointer;
+  }
+}
 // lock to avoid interleaving concurrent printf's.
 static struct {
   struct spinlock lock;
